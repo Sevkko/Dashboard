@@ -16,19 +16,23 @@ create index if not exists entries_user_id_entry_date_idx
 
 alter table public.entries enable row level security;
 
+drop policy if exists "Users can view their own entries" on public.entries;
 create policy "Users can view their own entries"
   on public.entries for select
   using (auth.uid() = user_id);
 
+drop policy if exists "Users can insert their own entries" on public.entries;
 create policy "Users can insert their own entries"
   on public.entries for insert
   with check (auth.uid() = user_id);
 
+drop policy if exists "Users can update their own entries" on public.entries;
 create policy "Users can update their own entries"
   on public.entries for update
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
 
+drop policy if exists "Users can delete their own entries" on public.entries;
 create policy "Users can delete their own entries"
   on public.entries for delete
   using (auth.uid() = user_id);
