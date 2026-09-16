@@ -1,0 +1,13 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1440, "h": 1160 },
+    { "file": "Detail.dc.html", "x": 1560, "y": 0, "w": 1440, "h": 1160 },
+    { "file": "Mobile.dc.html", "x": 3120, "y": 0, "w": 390, "h": 1050 }
+  ],
+  "annotations": [
+    { "id": "note-overview", "x": 0, "y": -90, "w": 400, "text": "Übersicht — Sidebar-Navigation & Theme-Toggle sind klickbar" },
+    { "id": "note-detail", "x": 1560, "y": -90, "w": 400, "text": "Detailansicht — Spalten \"Datum\"/\"Betrag\" sind sortierbar" },
+    { "id": "note-mobile", "x": 3120, "y": -90, "w": 340, "text": "Mobile — Menü-Icon öffnet die Navigation" }
+  ],
+  "launch": { "view": "canvas" }
+}

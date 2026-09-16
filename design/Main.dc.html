@@ -1,0 +1,369 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Public+Sans:wght@400;500;600&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .app {
+      font-family: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      width: 1440px;
+      min-height: 1080px;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      transition: background .2s ease, color .2s ease;
+    }
+    [data-theme="light"] {
+      --bg: oklch(98% 0.004 250);
+      --bg-elevated: oklch(100% 0 0);
+      --bg-subtle: oklch(96% 0.006 250);
+      --border: oklch(90% 0.008 250);
+      --text: oklch(22% 0.014 250);
+      --text-muted: oklch(50% 0.016 250);
+      --accent: oklch(58% 0.16 259);
+      --accent-soft: oklch(93% 0.035 259);
+      --positive: oklch(56% 0.15 152);
+      --positive-soft: oklch(94% 0.045 152);
+      --negative: oklch(58% 0.19 25);
+      --negative-soft: oklch(94% 0.045 25);
+      --warning: oklch(68% 0.15 70);
+      --warning-soft: oklch(94% 0.05 80);
+      --shadow: 0 1px 2px oklch(20% 0.02 250 / 0.06), 0 8px 24px oklch(20% 0.02 250 / 0.06);
+    }
+    [data-theme="dark"] {
+      --bg: oklch(21% 0.014 258);
+      --bg-elevated: oklch(25% 0.016 258);
+      --bg-subtle: oklch(28% 0.018 258);
+      --border: oklch(35% 0.02 258);
+      --text: oklch(95% 0.006 258);
+      --text-muted: oklch(68% 0.016 258);
+      --accent: oklch(74% 0.14 259);
+      --accent-soft: oklch(32% 0.06 259);
+      --positive: oklch(72% 0.14 152);
+      --positive-soft: oklch(32% 0.06 152);
+      --negative: oklch(68% 0.18 25);
+      --negative-soft: oklch(33% 0.07 25);
+      --warning: oklch(78% 0.13 80);
+      --warning-soft: oklch(34% 0.06 80);
+      --shadow: 0 1px 2px oklch(0% 0 0 / 0.3), 0 8px 24px oklch(0% 0 0 / 0.35);
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent); text-decoration: underline; }
+    h1, h2, h3, .brand { font-family: 'Manrope', sans-serif; }
+
+    /* sidebar */
+    .sidebar { width: 260px; flex-shrink: 0; background: var(--bg-elevated); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 24px 16px; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
+    .brand-mark { width: 30px; height: 30px; border-radius: 9px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .brand-mark svg { width: 17px; height: 17px; stroke: white; }
+    .nav-group { display: flex; flex-direction: column; gap: 2px; }
+    .nav-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); padding: 8px 12px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 9px; border: none; background: transparent; color: var(--text-muted); font-family: 'Public Sans', sans-serif; font-size: 14.5px; font-weight: 500; cursor: pointer; text-align: left; width: 100%; }
+    .nav-item svg { width: 19px; height: 19px; stroke: currentColor; flex-shrink: 0; }
+    .nav-item:hover { background: var(--bg-subtle); color: var(--text); }
+    .nav-item.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+    .sidebar-footer { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; background: var(--bg-subtle); }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+    .sidebar-footer-name { font-size: 13.5px; font-weight: 600; }
+    .sidebar-footer-role { font-size: 12px; color: var(--text-muted); }
+
+    /* main column */
+    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .topbar { height: 72px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; border-bottom: 1px solid var(--border); gap: 24px; }
+    .search { display: flex; align-items: center; gap: 10px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px; padding: 9px 14px; width: 340px; color: var(--text-muted); }
+    .search svg { width: 17px; height: 17px; stroke: currentColor; flex-shrink: 0; }
+    .search span { font-size: 14px; }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .icon-btn { width: 38px; height: 38px; border-radius: 9px; border: 1px solid var(--border); background: var(--bg-elevated); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); position: relative; }
+    .icon-btn:hover { color: var(--text); background: var(--bg-subtle); }
+    .icon-btn svg { width: 18px; height: 18px; stroke: currentColor; }
+    .dot-badge { position: absolute; top: 8px; right: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--negative); border: 1.5px solid var(--bg-elevated); }
+
+    .content { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+    .page-head { display: flex; align-items: baseline; justify-content: space-between; }
+    .page-title { font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.01em; }
+    .page-sub { color: var(--text-muted); font-size: 14px; margin: 4px 0 0; }
+    .btn-primary { background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 9px; font-family: 'Public Sans'; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .btn-primary svg { width: 16px; height: 16px; stroke: currentColor; }
+
+    /* kpi cards */
+    .kpi-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+    .card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); }
+    .kpi-card { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .kpi-top { display: flex; align-items: center; justify-content: space-between; }
+    .kpi-label { font-size: 13.5px; color: var(--text-muted); font-weight: 500; }
+    .kpi-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; }
+    .kpi-icon svg { width: 16px; height: 16px; stroke: currentColor; }
+    .kpi-value { font-family: 'Manrope'; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+    .kpi-delta { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+    .kpi-delta svg { width: 13px; height: 13px; }
+    .kpi-delta.positive { color: var(--positive); }
+    .kpi-delta.negative { color: var(--negative); }
+    .kpi-period { color: var(--text-muted); font-weight: 400; }
+
+    /* charts row */
+    .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: stretch; }
+    .chart-card { padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+    .chart-head { display: flex; align-items: center; justify-content: space-between; }
+    .chart-title { font-size: 15.5px; font-weight: 700; }
+    .chart-total { font-family: 'Manrope'; font-size: 20px; font-weight: 800; }
+    .period-pill { display: flex; gap: 4px; background: var(--bg-subtle); border-radius: 8px; padding: 3px; }
+    .period-pill span { font-size: 12.5px; padding: 5px 10px; border-radius: 6px; color: var(--text-muted); font-weight: 600; }
+    .period-pill span.active { background: var(--bg-elevated); color: var(--text); box-shadow: var(--shadow); }
+    .month-labels { display: flex; justify-content: space-between; padding: 0 20px; font-size: 12px; color: var(--text-muted); }
+    .legend { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+    .legend-row { display: flex; align-items: center; justify-content: space-between; font-size: 13.5px; }
+    .legend-left { display: flex; align-items: center; gap: 10px; }
+    .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .legend-pct { font-weight: 700; }
+
+    /* table */
+    .table-card { padding: 4px 0 8px; }
+    .table-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px 14px; }
+    .table-title { font-size: 15.5px; font-weight: 700; }
+    .link-all { font-size: 13.5px; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600; padding: 10px 22px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    td { padding: 14px 22px; font-size: 14px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    .cust-cell { display: flex; align-items: center; gap: 10px; }
+    .cust-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--bg-subtle); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; color: var(--text-muted); flex-shrink: 0; }
+    .cust-name { font-weight: 600; }
+    .cust-id { color: var(--text-muted); font-size: 12.5px; }
+    .amount { font-weight: 700; font-family: 'Manrope'; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; padding: 5px 10px; border-radius: 100px; }
+    .badge.success { background: var(--positive-soft); color: var(--positive); }
+    .badge.pending { background: var(--warning-soft); color: var(--warning); }
+    .badge.failed { background: var(--negative-soft); color: var(--negative); }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  </style>
+</helmet>
+
+<div class="app" data-theme="{{theme}}">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-6 4 4 6-8"/></svg></span>
+      Northbeam
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Menü</span>
+      <button class="nav-item {{navOverviewClass}}" onClick="{{selectOverview}}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>
+        Übersicht
+      </button>
+      <button class="nav-item {{navAnalyticsClass}}" onClick="{{selectAnalytics}}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="12" width="4" height="8" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="16" y="9" width="4" height="11" rx="1"/></svg>
+        Analytics
+      </button>
+      <button class="nav-item {{navTransactionsClass}}" onClick="{{selectTransactions}}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
+        Transaktionen
+      </button>
+      <button class="nav-item {{navCustomersClass}}" onClick="{{selectCustomers}}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.6 2.7-6.2 6-6.2s6 2.6 6 6.2"/><circle cx="17.5" cy="9" r="2.4"/><path d="M15.8 14.1c2.2.4 3.7 2.1 3.9 4.9"/></svg>
+        Kunden
+      </button>
+      <button class="nav-item {{navReportsClass}}" onClick="{{selectReports}}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1.5"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        Berichte
+      </button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">System</span>
+      <button class="nav-item {{navSettingsClass}}" onClick="{{selectSettings}}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="14" cy="6" r="2"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="8" cy="12" r="2"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="16" cy="18" r="2"/></svg>
+        Einstellungen
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <span class="avatar">MW</span>
+      <div>
+        <div class="sidebar-footer-name">Marcel Weld</div>
+        <div class="sidebar-footer-role">Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Suchen …</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" onClick="{{toggleTheme}}">
+          <sc-if value="{{isDark}}" hint-placeholder-val="{{false}}">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1110 4.5a6.5 6.5 0 0010 10z"/></svg>
+          </sc-if>
+          <sc-if value="{{isLight}}" hint-placeholder-val="{{true}}">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="5" y1="5" x2="6.8" y2="6.8"/><line x1="17.2" y1="17.2" x2="19" y2="19"/><line x1="19" y1="5" x2="17.2" y2="6.8"/><line x1="6.8" y1="17.2" x2="5" y2="19"/></svg>
+          </sc-if>
+        </button>
+        <button class="icon-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8.5a6 6 0 0112 0c0 4.2 1.5 5.7 1.5 5.7h-15S6 12.7 6 8.5z"/><path d="M10.3 18a1.9 1.9 0 003.4 0"/></svg>
+          <span class="dot-badge"></span>
+        </button>
+        <span class="avatar">MW</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">Übersicht</h1>
+          <p class="page-sub">Willkommen zurück — hier ist deine Performance im September.</p>
+        </div>
+        <button class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Bericht erstellen
+        </button>
+      </div>
+
+      <div class="kpi-row">
+        <div class="card kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Umsatz</span><span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M8 7.5c0-1.7 1.8-2.5 4-2.5s4 .9 4 2.3c0 3.4-8 1.6-8 5.2 0 1.5 1.8 2.5 4 2.5s4-.8 4-2.5"/></svg></span></div>
+          <div class="kpi-value">48.320 €</div>
+          <div class="kpi-delta positive"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M4 7l4-4 4 4"/></svg>+12,4% <span class="kpi-period">vs. Vormonat</span></div>
+        </div>
+        <div class="card kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Bestellungen</span><span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16l-1.5 11a2 2 0 01-2 1.7H7.5a2 2 0 01-2-1.7L4 7z"/><path d="M8 7V5a4 4 0 018 0v2"/></svg></span></div>
+          <div class="kpi-value">1.284</div>
+          <div class="kpi-delta positive"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M4 7l4-4 4 4"/></svg>+4,1% <span class="kpi-period">vs. Vormonat</span></div>
+        </div>
+        <div class="card kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Neue Kunden</span><span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.6 2.7-6.2 6-6.2s6 2.6 6 6.2"/><circle cx="17.5" cy="9" r="2.4"/><path d="M15.8 14.1c2.2.4 3.7 2.1 3.9 4.9"/></svg></span></div>
+          <div class="kpi-value">312</div>
+          <div class="kpi-delta negative"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M4 9l4 4 4-4"/></svg>-2,3% <span class="kpi-period">vs. Vormonat</span></div>
+        </div>
+        <div class="card kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Conversion Rate</span><span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l5-6 4 3 7-9"/><path d="M14 6h6v6"/></svg></span></div>
+          <div class="kpi-value">3,8%</div>
+          <div class="kpi-delta positive"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M4 7l4-4 4 4"/></svg>+0,6% <span class="kpi-period">vs. Vormonat</span></div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="card chart-card">
+          <div class="chart-head">
+            <div>
+              <div class="chart-title">Umsatzentwicklung</div>
+              <div class="chart-total">48.320 €</div>
+            </div>
+            <div class="period-pill"><span class="active">6M</span><span>1J</span><span>Alle</span></div>
+          </div>
+          <svg viewBox="0 0 600 200" width="100%" height="200" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4f66f0" stop-opacity="0.28"/>
+                <stop offset="100%" stop-color="#4f66f0" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <line x1="20" y1="20" x2="580" y2="20" stroke="var(--border)" stroke-width="1"/>
+            <line x1="20" y1="95" x2="580" y2="95" stroke="var(--border)" stroke-width="1"/>
+            <line x1="20" y1="170" x2="580" y2="170" stroke="var(--border)" stroke-width="1"/>
+            <path d="M20,67.6 L132,48.4 L244,58 L356,35.6 L468,45.2 L580,16.4 L580,190 L20,190 Z" fill="url(#areaFill)"/>
+            <path d="M20,67.6 L132,48.4 L244,58 L356,35.6 L468,45.2 L580,16.4" fill="none" stroke="#4f66f0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="580" cy="16.4" r="4.5" fill="#4f66f0"/>
+          </svg>
+          <div class="month-labels"><span>Apr</span><span>Mai</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
+        </div>
+
+        <div class="card chart-card">
+          <div class="chart-head"><div class="chart-title">Kategorien</div></div>
+          <svg viewBox="0 0 200 200" width="100%" height="180">
+            <g transform="rotate(-90 100 100)">
+              <circle cx="100" cy="100" r="70" fill="none" stroke="var(--bg-subtle)" stroke-width="26"/>
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#4f66f0" stroke-width="26" stroke-dasharray="167.1 439.8" stroke-dashoffset="0"/>
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#14b8a6" stroke-width="26" stroke-dasharray="118.7 439.8" stroke-dashoffset="-167.1"/>
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#f59e0b" stroke-width="26" stroke-dasharray="88.0 439.8" stroke-dashoffset="-285.9"/>
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#94a3b8" stroke-width="26" stroke-dasharray="66.0 439.8" stroke-dashoffset="-373.8"/>
+            </g>
+          </svg>
+          <div class="legend">
+            <div class="legend-row"><span class="legend-left"><span class="legend-dot" style="background:#4f66f0"></span>Elektronik</span><span class="legend-pct">38%</span></div>
+            <div class="legend-row"><span class="legend-left"><span class="legend-dot" style="background:#14b8a6"></span>Mode</span><span class="legend-pct">27%</span></div>
+            <div class="legend-row"><span class="legend-left"><span class="legend-dot" style="background:#f59e0b"></span>Haushalt</span><span class="legend-pct">20%</span></div>
+            <div class="legend-row"><span class="legend-left"><span class="legend-dot" style="background:#94a3b8"></span>Sonstiges</span><span class="legend-pct">15%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card table-card">
+        <div class="table-head">
+          <span class="table-title">Letzte Aktivitäten</span>
+          <a class="link-all" href="#">Alle ansehen →</a>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Transaktion</th><th>Datum</th><th>Betrag</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="cust-cell"><span class="cust-avatar">LK</span><div><div class="cust-name">Lena Krüger</div><div class="cust-id">#TX-8213</div></div></div></td>
+              <td>12. Sep 2026</td><td class="amount">249,00 €</td>
+              <td><span class="badge success"><span class="badge-dot"></span>Erfolgreich</span></td>
+            </tr>
+            <tr>
+              <td><div class="cust-cell"><span class="cust-avatar">JB</span><div><div class="cust-name">Jonas Bauer</div><div class="cust-id">#TX-8212</div></div></div></td>
+              <td>12. Sep 2026</td><td class="amount">89,90 €</td>
+              <td><span class="badge pending"><span class="badge-dot"></span>Ausstehend</span></td>
+            </tr>
+            <tr>
+              <td><div class="cust-cell"><span class="cust-avatar">SM</span><div><div class="cust-name">Sofia Meyer</div><div class="cust-id">#TX-8211</div></div></div></td>
+              <td>11. Sep 2026</td><td class="amount">1.240,00 €</td>
+              <td><span class="badge success"><span class="badge-dot"></span>Erfolgreich</span></td>
+            </tr>
+            <tr>
+              <td><div class="cust-cell"><span class="cust-avatar">TW</span><div><div class="cust-name">Tim Wagner</div><div class="cust-id">#TX-8210</div></div></div></td>
+              <td>11. Sep 2026</td><td class="amount">54,50 €</td>
+              <td><span class="badge failed"><span class="badge-dot"></span>Fehlgeschlagen</span></td>
+            </tr>
+            <tr>
+              <td><div class="cust-cell"><span class="cust-avatar">AH</span><div><div class="cust-name">Anna Hoffmann</div><div class="cust-id">#TX-8209</div></div></div></td>
+              <td>10. Sep 2026</td><td class="amount">328,20 €</td>
+              <td><span class="badge success"><span class="badge-dot"></span>Erfolgreich</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":null,"default":"light"}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const theme = this.state.theme ?? this.props.theme ?? 'light';
+    const active = this.state.activeNav ?? 'overview';
+    const cls = (id) => (active === id ? 'active' : '');
+    const select = (id) => () => this.setState({ activeNav: id });
+    return {
+      theme,
+      isDark: theme === 'dark',
+      isLight: theme === 'light',
+      toggleTheme: () => this.setState({ theme: theme === 'dark' ? 'light' : 'dark' }),
+      navOverviewClass: cls('overview'),
+      navAnalyticsClass: cls('analytics'),
+      navTransactionsClass: cls('transactions'),
+      navCustomersClass: cls('customers'),
+      navReportsClass: cls('reports'),
+      navSettingsClass: cls('settings'),
+      selectOverview: select('overview'),
+      selectAnalytics: select('analytics'),
+      selectTransactions: select('transactions'),
+      selectCustomers: select('customers'),
+      selectReports: select('reports'),
+      selectSettings: select('settings'),
+    };
+  }
+}
+</script>
+</body>
+</html>
